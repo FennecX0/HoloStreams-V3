@@ -66,7 +66,7 @@ async def check_streams():
 
             if video_id not in notified_streams:
                 notified_streams[video_id] = True
-                stream_start_time = datetime.datetime.utcnow()
+                stream_start_time = datetime.datetime.now(datetime.timezone.utc)
 
                 embed = get_embed_for_member(
                     name=name,
