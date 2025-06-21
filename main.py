@@ -34,7 +34,7 @@ intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
 notified_streams = {}
 
-# ==== Flask Keep Alive (for Railway/Ping Tools) ====
+# ==== Flask Keep Alive ====
 app = Flask('')
 
 @app.route('/')
@@ -44,11 +44,15 @@ def home():
 def keep_alive():
     Thread(target=lambda: app.run(host='0.0.0.0', port=8080)).start()
 
-# ==== Stream Check using Holodex ====
+# ==== Holodex Stream Check ====
 @tasks.loop(minutes=1)
 async def check_streams():
     url = "https://holodex.net/api/v2/live?org=Hololive&lang=en"
-    headers = {"X-API-Key": HOLODEX_API_KEY} if HOLODEX_API_KEY else {}
+    headers = {
+        "User-Agent": "HololiveDiscordBot/1.0 (contact: fexerzaza@gmail.com)"  # Customize this
+    }
+    if HOLODEX_API_KEY:
+        headers["X-API-Key"] = HOLODEX_API_KEY
 
     try:
         response = requests.get(url, headers=headers)
